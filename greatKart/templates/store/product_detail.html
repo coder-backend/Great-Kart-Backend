@@ -72,7 +72,12 @@
         {%if single_product.stock <= 0%}
             <a href="#" class="btn  btn-primary bg-red"> <span class="text">Out Of Stock</span> <i class="fas fa-shopping-cart"></i>  </a>
         {%else%}
-            <a href="{%url 'add_cart' single_product.id%}" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </a>
+            {%if in_cart%}
+                <a href="{%url 'cart'%}" class="btn  btn-success"> <span class="text">Cart Added</span> <i class="fas fa-check"></i>  </a>
+            {%else%}
+                <a href="{%url 'add_cart' single_product.id%}" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </a>
+            {%endif%}
+
         {%endif%}
     </article> <!-- product-info-aside .// -->
             </main> <!-- col.// -->

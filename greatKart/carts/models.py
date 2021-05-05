@@ -1,5 +1,5 @@
 from django.db import models
-from store.views import Product
+from store.models import Product
 # Create your models here.
 
 class Cart(models.Model):
