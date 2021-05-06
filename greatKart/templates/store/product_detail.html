@@ -65,11 +65,8 @@
             {%if single_product.stock <= 0%}
                 <a href="#" class="btn  btn-primary bg-red"> <span class="text">Out Of Stock</span> <i class="fas fa-shopping-cart"></i>  </a>
             {%else%}
-                {%if in_cart%}
-                    <a href="{%url 'cart'%}" class="btn  btn-success"> <span class="text">Cart Added</span> <i class="fas fa-check"></i>  </a>
-                {%else%}
-                    <button type="submit" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </button>
-                {%endif%}
+                <button type="submit" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </button>
+ 
 
             {%endif%}
         </article> <!-- product-info-aside .// -->
