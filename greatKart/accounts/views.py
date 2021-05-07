@@ -78,4 +78,10 @@ def logout(request):
 
 
 def activate(request,uidb64,token):
-    return HttpResponse(ok)
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = Account._default_manager.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, Account.DoesNotExist):
+        user=none
+         
+    return HttpResponse("ok")
