@@ -143,7 +143,7 @@ MESSAGE_TAGS ={
 EMAIL_HOST =  'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'aacs807@gmail.com'
-EMAIL_HOST_PASSWORD = 'TuApnaPasswordRakhnaIsPe'
+EMAIL_HOST_PASSWORD = 'yojaspreetbitch'
 EMAIL_USE_TLS = True
 
 # Default primary key field type
