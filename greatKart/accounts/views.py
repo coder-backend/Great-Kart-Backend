@@ -11,6 +11,9 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.utils.encoding import force_text
+
+from carts.models import Cart, CartItem
+from carts.views import _cart_item
 # Create your views here.
 
 
@@ -59,6 +62,18 @@ def login(request):
         user = auth.authenticate(email=email, password=password)
   
         if user is not None:
+
+            try:
+                cart = Cart.objects.get(cart_id=_cart_item(request))
+                is_cart_Item = CartItem.objects.filter(cart=cart).exists()
+                if is_cart_Item:
+                    cart_item = CartItem.objects.filter(cart=cart)
+                    for item in cart_item:
+                        item.user = user
+                        item.save()
+            except:
+                pass
+
             
             auth.login(request, user)
             messages.success(request, 'You are now looged in')
