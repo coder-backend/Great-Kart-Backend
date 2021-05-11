@@ -4,6 +4,10 @@ from carts.models import CartItem
 from .forms import OrderForm
 from .models import Order
 import datetime
+from .models import Payment
+from .models import Order
+from datetime import datetime as dt
+import random
 # Create your views here.
 
 
@@ -11,6 +15,36 @@ import datetime
 def payment(request):
     return render(request, 'orders/payment.html')
 
+def makePayment(request, order_number):
+    
+    user =request.user
+    order = Order.objects.get(user=user, is_ordered=False, order_number=order_number)
+    user_for_id = user.email.split('@')[0]
+    now = dt.now()
+    current_time1 = now.strftime("%H%M%S")
+    current_time2= now.strftime("%S%M%H")
+    ran = random.randint(0, 2)
+    
+    if(ran==1):
+        payment_id=current_time1 + user_for_id
+    else:
+        payment_id=current_time2 + user_for_id
+
+    grand_total= order.order_total
+    payment =Payment(
+        user=user,
+        payment_id=payment_id,
+        payment_method="database",
+        amount_paid=grand_total,
+        status="COMPLETED"
+    )
+    payment.save()
+
+    order.payment=payment
+    order.is_ordered =True
+    order.save()
+    return redirect('store')
+    
 
 
 

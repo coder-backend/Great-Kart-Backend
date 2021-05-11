@@ -106,7 +106,7 @@
 
             </aside> <!-- col.// -->
             <aside class="col-lg-4">
-
+               
                 <div class="card">
                 <div class="card-body">
                     <dl class="dlist-align">
@@ -125,7 +125,8 @@
                     <p class="text-center mb-3">
                         <img src="{%static './images/misc/payments.png'%}" height="26">
                     </p>
-                    <a href="{%url 'checkout'%}" class="btn btn-primary btn-block"> Make Payement </a>
+                    
+                    <a href="{%url 'makePayment' order.order_number%}" class="btn btn-primary btn-block"> Make Payement </a>
                     
                 </div> <!-- card-body.// -->
                 </div> <!-- card.// -->
