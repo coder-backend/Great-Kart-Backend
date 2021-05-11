@@ -2,12 +2,16 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from carts.models import CartItem
 from .forms import OrderForm
-from .models import Order
+from .models import Order, OrderProduct
 import datetime
 from .models import Payment
 from .models import Order
 from datetime import datetime as dt
 import random
+from store.models import Product
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+
 # Create your views here.
 
 
@@ -43,7 +47,65 @@ def makePayment(request, order_number):
     order.payment=payment
     order.is_ordered =True
     order.save()
-    return redirect('store')
+
+
+    cart_items = CartItem.objects.filter(user=request.user)
+    for item in cart_items:
+        orderproduct = OrderProduct()
+        orderproduct.order_id = order.id
+        orderproduct.payment = payment
+        orderproduct.user_id = request.user.id
+        orderproduct.product_id = item.product_id
+        orderproduct.quantity = item.quantity
+        orderproduct.product_price = item.product.price
+        orderproduct.ordered =True
+        orderproduct.save()
+
+        cart_item = CartItem.objects.get(id = item.id)
+        product_variation = cart_item.variation.all()
+        orderproduct = OrderProduct.objects.get(id=orderproduct.id)
+        orderproduct.variation.set(product_variation)
+        orderproduct.save()
+
+        product = Product.objects.get(id=item.product_id)
+        product.stock -= item.quantity
+        product.save()
+    
+    CartItem.objects.filter(user=request.user).delete()
+    mail_subject = 'Thank you for your order'
+    message = render_to_string('orders/order_recieved_email.html', {
+                'user':request.user,
+                'order':order
+            })
+    to_email = request.user.email
+    send_email = EmailMessage(mail_subject, message, to=[to_email])
+    send_email.send()
+
+
+    payment = Payment.objects.get(user=request.user,payment_id=payment_id)
+    order = Order.objects.get(user=request.user, order_number=order_number, is_ordered=True)
+    orderproduct = OrderProduct.objects.filter(user=request.user, payment=payment, order=order)
+    total =0
+    for orderP in orderproduct:
+        total+= orderP.quantity * orderP.product_price
+        print(total)
+    
+    yr = int(datetime.date.today().strftime('%Y'))
+    dy = int(datetime.date.today().strftime('%d'))
+    mt = int(datetime.date.today().strftime('%m'))
+    d =datetime.date(yr,mt,dy)
+    current_date = d.strftime("%Y%m%d")
+    order = Order.objects.filter(user=request.user, order_number=order_number, is_ordered=True)
+    
+    context={
+        'orderproduct':orderproduct,
+        'order_number':order_number,
+        'payment_id':payment_id,
+        'current_date':current_date,
+        'order':order,
+        'total':total,
+    }
+    return render(request, 'orders/order_complete.html', context)
     
 
 
