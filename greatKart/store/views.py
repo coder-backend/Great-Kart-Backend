@@ -1,6 +1,6 @@
 from django.core.checks import messages
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Product, ReviewRating
+from .models import Product, ReviewRating, ProductGallery
 from category.models import Category
 
 from carts.models import CartItem
@@ -59,6 +59,13 @@ def product_detail(request, category_slug, product_slug):
     except ObjectDoesNotExist:
         reviews="No review yet"
         reviewExist =False
+    
+    product_gallery_exists = ProductGallery.objects.filter(product_id = single_product.id).exists()
+
+    if product_gallery_exists:
+        product_gallery = ProductGallery.objects.filter(product_id = single_product.id)
+    else:
+        product_gallery=None
 
     context = {
         'single_product':single_product,
@@ -66,6 +73,9 @@ def product_detail(request, category_slug, product_slug):
         'orderproduct':orderproduct,
         'reviews':reviews,
         'reviewExist':reviewExist,
+        'product_gallery':product_gallery,
+        'product_gallery_exists':product_gallery_exists,
+
     }
     return render(request, 'store/product_detail.html', context) 
 
