@@ -1,0 +1,58 @@
+{%extends 'base.html'%}
+
+
+{%block content%}
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+ {% include 'includes/alerts.html' %}
+    <div class="container">
+        <div class="row">
+        <aside class="col-md-3">
+            <!--   SIDEBAR   -->
+            {% include 'includes/dashboard_sidebar.html' %}
+            <!--   SIDEBAR .//END   -->
+        </aside>
+        <main class="col-md-9">
+            <article class="card">
+            <header class="card-header">
+                <strong class="d-inline-block mr-3">Logged in as: </strong>
+                <span>{{user.full_name}}</span>
+            </header>
+            <div class="card-body">
+                <div class="row"> 
+                    <div class="col-md-6">
+                        <div class="card" style="text-align: center;">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Orders</h5>
+                                <h4>{{orders_count}}</h4>
+                                <a href="{%url 'my_orders'%}">View order</a>
+                            </div>
+                        </div>
+                      
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card" style="text-align: center;">
+                            <div class="card-body">
+                                <img src="{{imgurl}}" alt="" style="height: 50px; width: 50px; border-radius: 50%;">
+                                <p>{{user.email}}</p>
+                                <p>{{user.username}}</p>
+                            </div>
+                        </div>
+                      
+                </div> <!-- row.// -->
+            </div> <!-- card-body .// -->
+             <!-- table-responsive .end// -->
+            </article> <!-- order-group.// --> 
+        </main>
+    </div> <!-- row.// -->
+    </div>
+    
+    
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+    
+    
+{%endblock%}
